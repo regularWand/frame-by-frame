@@ -22,7 +22,9 @@ fbf.injectControls = function() {
     Injects extra player controls into the page.
     */
     // Really basic controls to get started.
-    controls_html = "(<a href=\"javascript: fbf.prevFrame()\">prev</a>/<a href=\"javascript: fbf.nextFrame()\">next</a>)"
+    controls_html = "(<a href=\"javascript: fbf.prevFrame()\" style=\"color: red\">prev</a>"
+        + "/"
+        + "<a href=\"javascript: fbf.nextFrame()\" style=\"color: red\">next</a>)"
     title_element = document.getElementById("watch-headline-title")
     title_element.innerHTML = controls_html + title_element.innerHTML
 }
