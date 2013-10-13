@@ -1,15 +1,17 @@
 {
     // Required
     "manifest_version": 2,
-    "name": "Frame by Frame",
+    "name": "frame by frame",
     // Semantic versioning: http://semver.org/
     "version": "0.1.0",
 
     // Recommended
     // "default_locale": "en",
     "description": "Adds frame by frame playback to YouTube.",
-    // "icons": {...},
-
+    "icons": {
+        "48": "icon-48.png",
+        "128": "icon-128.png"
+    },
     // Pick one (or none)
     // "browser_action": {...},
     // "page_action": {...},   

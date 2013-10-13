@@ -1,4 +1,4 @@
-frame-by-frame
+frame by frame
 ==============
 
 Chrome extension to add frame by frame playback to YouTube.
@@ -6,7 +6,7 @@ Chrome extension to add frame by frame playback to YouTube.
 How it works
 ------------
 
-frame-by-frame using Google Chrome's content scripts feature to add additional
+`frame by frame` uses Google Chrome's content scripts feature to add additional
 behavour to the YouTube player.
 
 Resources
@@ -25,3 +25,8 @@ http://stackoverflow.com/questions/9515704/building-a-chrome-extension-inject-co
 http://developer.chrome.com/extensions/packaging.html
 
 https://developers.google.com/chrome/web-store/docs/get_started_simple
+
+License
+-------
+
+MIT
