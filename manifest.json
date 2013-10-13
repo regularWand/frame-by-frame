@@ -15,7 +15,7 @@
     // "page_action": {...},   
 
     // Optional
-    // "author": ...,
+    "author": "Calum J. Eadie",
     // "background": {
     //   // Recommended
     //   "persistent": false
