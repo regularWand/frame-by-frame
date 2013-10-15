@@ -10,7 +10,7 @@
     "author": "Calum J. Eadie",
     "content_scripts": [
         {
-            "matches": ["http://www.youtube.com/watch*"],
+            "matches": ["http://www.youtube.com/watch*", "https://www.youtube.com/watch*"],
             "css": [],
             "js": ["content-script.js"]
         }
