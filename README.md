@@ -1,7 +1,14 @@
 frame by frame
 ==============
 
+https://chrome.google.com/webstore/detail/frame-by-frame/elkadbdicdciddfkdpmaolomehalghio
+
 Chrome extension to add frame by frame playback to YouTube.
+
+Installation
+------------
+
+https://chrome.google.com/webstore/detail/frame-by-frame/elkadbdicdciddfkdpmaolomehalghio
 
 How it works
 ------------
