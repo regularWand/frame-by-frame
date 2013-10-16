@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "frame by frame",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Adds frame by frame playback to YouTube.",
     "icons": {
         "48": "icon-48.png",
