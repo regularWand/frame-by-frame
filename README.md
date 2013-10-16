@@ -26,6 +26,8 @@ http://developer.chrome.com/extensions/packaging.html
 
 https://developers.google.com/chrome/web-store/docs/get_started_simple
 
+http://developer.chrome.com/extensions/tut_analytics.html
+
 License
 -------
 
