@@ -5,7 +5,7 @@ https://chrome.google.com/webstore/detail/frame-by-frame/elkadbdicdciddfkdpmaolo
 
 Experimental Google Chrome Extension to add frame by frame playback to YouTube.
 
-Currently only supports some videos, e.g. https://www.youtube.com/watch?v=97-NclfkuM0.
+Currently only supports some videos, e.g. http://www.youtube.com/watch?v=97-NclfkuM0.
 
 Installation
 ------------
