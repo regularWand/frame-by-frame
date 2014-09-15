@@ -40,4 +40,6 @@ fbf.injectControls = function() {
     });
 }
 
-fbf.injectControls();
+if (document.getElementsByClassName("html5-player-chrome")[0]) {
+    fbf.injectControls();
+};
