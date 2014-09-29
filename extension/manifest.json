@@ -11,9 +11,12 @@
     "content_scripts": [
         {
             "matches": ["http://www.youtube.com/watch*", "https://www.youtube.com/watch*"],
-            "css": [],
+            "css": ["css/youtube-controls.css"],
             "js": ["content-script.js"]
         }
     ],
-    "web_accessible_resources": ["frame-by-frame.js"]
+    "web_accessible_resources": [
+        "frame-by-frame.js",
+        "font/*"
+    ]
 }
