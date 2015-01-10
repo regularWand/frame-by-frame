@@ -4,7 +4,7 @@ Chrome Web Store Entry
 Description
 -----------
 
-Adds frame by frame playback to YouTube.
+Watch YouTube™ videos frame by frame.
 
 Created by Calum J. Eadie (http://calumjeadie.com) and Tom D. Chambers (http://tomchambers.me).
 

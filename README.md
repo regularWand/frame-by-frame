@@ -48,3 +48,15 @@ http://developer.chrome.com/extensions/packaging.html
 https://developers.google.com/chrome/web-store/docs/get_started_simple
 
 http://developer.chrome.com/extensions/tut_analytics.html
+
+https://developer.chrome.com/webstore/branding
+
+https://developers.google.com/youtube/branding_guidelines
+
+https://github.com/FortAwesome/Font-Awesome
+
+https://github.com/encharm/Font-Awesome-SVG-PNG
+
+http://fontello.com/
+
+https://developer.chrome.com/webstore/images
