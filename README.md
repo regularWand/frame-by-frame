@@ -60,3 +60,5 @@ https://github.com/encharm/Font-Awesome-SVG-PNG
 http://fontello.com/
 
 https://developer.chrome.com/webstore/images
+
+http://www.hongkiat.com/blog/youtube-keyboard-shortcuts/

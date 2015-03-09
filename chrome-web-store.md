@@ -4,7 +4,7 @@ Chrome Web Store Entry
 Description
 -----------
 
-Watch YouTube™ videos frame by frame.
+Use the buttons added to your video controls or the [ and ] keyboard shortcuts to navigate backwards and forwards frame by frame.
 
 Created by Calum J. Eadie (http://calumjeadie.com) and Tom D. Chambers (http://tomchambers.me).
 

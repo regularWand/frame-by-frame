@@ -2,6 +2,8 @@ fbf = {};
 
 fbf.FRAMES_PER_SECOND = 25;
 fbf.PLAYER_ID = "movie_player"
+fbf.LEFT_SQUARE_BRACKET = 219;
+fbf.RIGHT_SQUARE_BRACKET = 221;
 
 fbf.prevFrame = function() {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
@@ -42,4 +44,15 @@ fbf.injectControls = function() {
 
 if (document.getElementsByClassName("html5-player-chrome")[0]) {
     fbf.injectControls();
+
+    document.addEventListener("keydown", function(e) {
+        switch(e.which) {
+            case fbf.LEFT_SQUARE_BRACKET:
+                fbf.prevFrame();
+                break
+            case fbf.RIGHT_SQUARE_BRACKET:
+                fbf.nextFrame();
+                break;
+        }
+    }, false);
 };
