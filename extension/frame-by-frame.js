@@ -71,22 +71,23 @@ if (document.getElementsByClassName("html5-player-chrome")[0]) {
         switch(e.which) {
             case fbf.LEFT_SQUARE_BRACKET:
                 fbf.prevFrame(frameSkip);
-                break
+                break;
             case fbf.RIGHT_SQUARE_BRACKET:
                 fbf.nextFrame(frameSkip);
-                break
+                break;
 		    case fbf.commaKey:
 				if (frameSkip >=2){
 					frameSkip=frameSkip/2;
 				}
-                break
+                break;
             case fbf.periodKey:
 				if (frameSkip <=32){
 					frameSkip=frameSkip*2;
 				}
-				break
+				break;
 			case fbf.pKey:
 				fbf.fbfPlayback();
+				break;
 			case fbf.oKey:
 				fbf.setFrameRate();
                 break;
