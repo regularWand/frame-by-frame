@@ -37,12 +37,12 @@ fbf.injectControls = function() {
 
     var forward_button = document.getElementsByClassName("icon-to-end")[0];
     forward_button.addEventListener('click', function() {
-        fbf.nextFrame(frameSkip);
+        fbf.nextFrame();
     });
 
     var back_button = document.getElementsByClassName("icon-to-start")[0];
     back_button.addEventListener('click', function() {
-        fbf.prevFrame(frameSkip);
+        fbf.prevFrame();
     });
 }
 
