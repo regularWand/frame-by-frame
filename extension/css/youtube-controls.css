@@ -41,12 +41,12 @@
 }
 
 .icon {
-  color: #757575;
+  color: rgb(238, 238, 238);
   font-size: 15px;
   line-height: 27px;
   cursor: pointer;
 }
-.icon:hover { color: #959595; } 
+.icon:hover { color: rgb(255, 255, 255); } 
 
 .icon-to-end:before { content: '\e800'; } /* '' */
 .icon-to-start:before { content: '\e801'; } /* '' */

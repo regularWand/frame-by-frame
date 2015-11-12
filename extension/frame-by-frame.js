@@ -20,12 +20,13 @@ fbf.nextFrame = function() {
 }
 
 fbf.injectControls = function() {
-    var controls_html = "<i class=\"icon icon-to-start\"></i> <i class=\"icon icon-to-end\"></i>";
-    var control_bar = document.getElementsByClassName("html5-player-chrome")[0];
+    var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
+    var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
     
     var newButtons = document.createElement('div');
     newButtons.innerHTML = controls_html;
     newButtons.style.float = 'left';
+    newButtons.style['margin-top'] = '2px';
 
     var child = document.getElementsByClassName('ytp-volume-hover-area')[0];
 
@@ -42,7 +43,7 @@ fbf.injectControls = function() {
     });
 }
 
-if (document.getElementsByClassName("html5-player-chrome")[0]) {
+if (document.getElementsByClassName("ytp-chrome-controls")[0]) {
     fbf.injectControls();
 
     document.addEventListener("keydown", function(e) {
