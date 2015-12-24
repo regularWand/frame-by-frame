@@ -1,26 +1,27 @@
 fbf = {};
 
 fbf.FRAMES_PER_SECOND = 30;
-fbf.PLAYER_ID = "movie_player"
+fbf.PLAYER_ID = "movie_player";
 fbf.LEFT_SQUARE_BRACKET = 219;
 fbf.RIGHT_SQUARE_BRACKET = 221;
-fbf.commaKey = 188;
-fbf.periodKey = 190;
-fbf.pKey = 80;
-fbf.oKey = 79;
-var frameSkip = 1;
-player = document.getElementById(fbf.PLAYER_ID);
+fbf.COMMA = 188;
+fbf.PERIOD = 190;
+fbf.P_KEY = 80;
+fbf.O_KEY = 79;
+FRAMESKIP = 1;
 
-fbf.prevFrame = function(frameSkip) {
+fbf.prevFrame = function(FRAMESKIP) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
-	player.pauseVideo();
-    player.seekBy(-frameSkip * (1/fbf.FRAMES_PER_SECOND));
+    player = document.getElementById(fbf.PLAYER_ID);
+    player.pauseVideo();
+    player.seekBy(-FRAMESKIP * (1/fbf.FRAMES_PER_SECOND));
 }
 
-fbf.nextFrame = function(frameSkip) {
+fbf.nextFrame = function(FRAMESKIP) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
-	player.pauseVideo();
-    player.seekBy(frameSkip * (1/fbf.FRAMES_PER_SECOND));
+    player = document.getElementById(fbf.PLAYER_ID);
+    player.pauseVideo();
+    player.seekBy(FRAMESKIP * (1/fbf.FRAMES_PER_SECOND));
 }
 
 fbf.fbfPlayback = function() {
@@ -33,21 +34,24 @@ fbf.fbfPlayback = function() {
 }
 
 fbf.setFrameRate = function() {
-	if (fbf.FRAMES_PER_SECOND == 30) {
+	if (fbf.FRAMES_PER_SECOND==30) {
 		fbf.FRAMES_PER_SECOND = 24;
+		console.log("FRAMESKIP set to 1/24 for 24 FPS video");
 	}
 	else {
 		fbf.FRAMES_PER_SECOND = 30;
+		console.log("FRAMESKIP set to 1/30 for 30 FPS video");
 	}
 }
 
 fbf.injectControls = function() {
-    var controls_html = "<i class=\"icon icon-to-start\"></i> <i class=\"icon icon-to-end\"></i>";
-    var control_bar = document.getElementsByClassName("html5-player-chrome")[0];
+    var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
+    var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
     
     var newButtons = document.createElement('div');
     newButtons.innerHTML = controls_html;
     newButtons.style.float = 'left';
+    newButtons.style['margin-top'] = '2px';
 
     var child = document.getElementsByClassName('ytp-volume-hover-area')[0];
 
@@ -55,40 +59,40 @@ fbf.injectControls = function() {
 
     var forward_button = document.getElementsByClassName("icon-to-end")[0];
     forward_button.addEventListener('click', function() {
-        fbf.nextFrame(frameSkip);
+        fbf.nextFrame();
     });
 
     var back_button = document.getElementsByClassName("icon-to-start")[0];
     back_button.addEventListener('click', function() {
-        fbf.prevFrame(frameSkip);
+        fbf.prevFrame();
     });
 }
 
-if (document.getElementsByClassName("html5-player-chrome")[0]) {
+if (document.getElementsByClassName("ytp-chrome-controls")[0]) {
     fbf.injectControls();
 
-    document.addEventListener("keydown", function(e) {
+document.addEventListener("keydown", function(e) {
         switch(e.which) {
             case fbf.LEFT_SQUARE_BRACKET:
-                fbf.prevFrame(frameSkip);
+                fbf.prevFrame(FRAMESKIP);
                 break;
             case fbf.RIGHT_SQUARE_BRACKET:
-                fbf.nextFrame(frameSkip);
+                fbf.nextFrame(FRAMESKIP);
                 break;
-		    case fbf.commaKey:
-				if (frameSkip >=2){
-					frameSkip=frameSkip/2;
+            case fbf.COMMA:
+				if (FRAMESKIP >=2){
+					FRAMESKIP=FRAMESKIP/2;
 				}
                 break;
-            case fbf.periodKey:
-				if (frameSkip <=32){
-					frameSkip=frameSkip*2;
+            case fbf.PERIOD:
+				if (FRAMESKIP <=32){
+					FRAMESKIP=FRAMESKIP*2;
 				}
 				break;
-			case fbf.pKey:
+            case fbf.P_KEY:
 				fbf.fbfPlayback();
 				break;
-			case fbf.oKey:
+            case fbf.O_KEY:
 				fbf.setFrameRate();
                 break;
         }
