@@ -45,7 +45,7 @@ fbf.setFrameRate = function() {
 }
 
 fbf.injectControls = function() {
-    var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
+    var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i> <span> </span?";
     var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
     
     var newButtons = document.createElement('div');
@@ -59,12 +59,12 @@ fbf.injectControls = function() {
 
     var forward_button = document.getElementsByClassName("icon-to-end")[0];
     forward_button.addEventListener('click', function() {
-        fbf.nextFrame();
+        fbf.nextFrame(FRAMESKIP);
     });
 
     var back_button = document.getElementsByClassName("icon-to-start")[0];
     back_button.addEventListener('click', function() {
-        fbf.prevFrame();
+        fbf.prevFrame(FRAMESKIP);
     });
 }
 
@@ -81,12 +81,12 @@ document.addEventListener("keydown", function(e) {
                 break;
             case fbf.COMMA:
 				if (FRAMESKIP >=2){
-					FRAMESKIP=FRAMESKIP/2;
+					FRAMESKIP/=2;
 				}
                 break;
             case fbf.PERIOD:
-				if (FRAMESKIP <=32){
-					FRAMESKIP=FRAMESKIP*2;
+				if (FRAMESKIP <=16){
+					FRAMESKIP*=2;
 				}
 				break;
             case fbf.P_KEY:
