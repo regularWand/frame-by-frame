@@ -22,13 +22,13 @@ behavour to the YouTube player.
 
 <b>Hotkeys:</b>
 
-<b>[ and ]</b> to seek by current frameskip (default 1)
+<b>[</b> and <b>]</b> to seek by current frameskip (default 1)
 
-<b>< and ></b> to decrease or increase frameskip by a factor of 2 respectively
+<b><</b> and  <b>></b> to decrease or increase frameskip by a factor of 2 respectively
 
 <b>P</b> to toggle between minimum and normal playbackrate
 
-<b>O</b> to toggle between 30 and 24 fps (default 30 fps)
+<b>O</b> to toggle between frame-by-frame skipping for 30 and 24 fps video (default 30 fps)
 
 License
 -------
