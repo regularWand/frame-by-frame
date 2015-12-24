@@ -57,8 +57,8 @@ fbf.multiplyFS = function(factor) {
 fbf.injectControls = function() {
     var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
     var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
-    var fpsAndFrameskip_html = "<b>fps:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
-	&nbsp;&nbsp;&nbsp;<b> frameskip:&nbsp;" + FRAMESKIP + "</b>";
+    var fpsAndFrameskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
+	&nbsp;&nbsp;<b> Frameskip:&nbsp;" + FRAMESKIP + "</b>";
 	
     var newButtons = document.createElement('div');
     newButtons.innerHTML = controls_html;
@@ -76,8 +76,8 @@ fbf.injectControls = function() {
 	control_bar.insertBefore(fpsAndFrameskip, child);
 	
 	fbf.updateFpsAndFS = function() {
-		fpsAndFrameskip_html = "<b>fps:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
-	&nbsp;&nbsp;&nbsp;<b> frameskip:&nbsp;" + FRAMESKIP + "</b>";
+		fpsAndFrameskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
+	&nbsp;&nbsp;<b> Frameskip:&nbsp;" + FRAMESKIP + "</b>";
 		fpsAndFrameskip.innerHTML = fpsAndFrameskip_html;
 	}
 	
