@@ -1,6 +1,6 @@
 fbf = {};
 
-fbf.FRAMES_PER_SECOND = 30;
+fbf.FRAMES_PER_SECOND = 25;
 fbf.PLAYER_ID = "movie_player";
 fbf.LEFT_SQUARE_BRACKET = 219;
 fbf.RIGHT_SQUARE_BRACKET = 221;
@@ -34,13 +34,13 @@ fbf.fbfPlayback = function() {
 }
 
 fbf.setFrameRate = function() {
-	if (fbf.FRAMES_PER_SECOND==30) {
-		fbf.FRAMES_PER_SECOND = 24;
-		console.log("FRAMESKIP set to 1/24 for 24 FPS video");
-	}
-	else {
+	if (fbf.FRAMES_PER_SECOND==25) {
 		fbf.FRAMES_PER_SECOND = 30;
 		console.log("FRAMESKIP set to 1/30 for 30 FPS video");
+	}
+	else {
+		fbf.FRAMES_PER_SECOND = 25;
+		console.log("FRAMESKIP set to 1/25 for 25 FPS video");
 	}
 }
 
