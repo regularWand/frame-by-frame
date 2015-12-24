@@ -9,17 +9,16 @@ fbf.PERIOD = 190;
 fbf.P_KEY = 80;
 fbf.O_KEY = 79;
 var FRAMESKIP = 1;
+var player = document.getElementById(fbf.PLAYER_ID);
 
 fbf.prevFrame = function(FRAMESKIP) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
-    player = document.getElementById(fbf.PLAYER_ID);
     player.pauseVideo();
     player.seekBy(-FRAMESKIP * (1/fbf.FRAMES_PER_SECOND));
 }
 
 fbf.nextFrame = function(FRAMESKIP) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
-    player = document.getElementById(fbf.PLAYER_ID);
     player.pauseVideo();
     player.seekBy(FRAMESKIP * (1/fbf.FRAMES_PER_SECOND));
 }
