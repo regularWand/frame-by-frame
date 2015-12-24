@@ -8,7 +8,7 @@ fbf.COMMA = 188;
 fbf.PERIOD = 190;
 fbf.P_KEY = 80;
 fbf.O_KEY = 79;
-FRAMESKIP = 1;
+var FRAMESKIP = 1;
 
 fbf.prevFrame = function(FRAMESKIP) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
@@ -42,21 +42,45 @@ fbf.setFrameRate = function() {
 		fbf.FRAMES_PER_SECOND = 25;
 		console.log("FRAMESKIP set to 1/25 for 25 FPS video");
 	}
+	fbf.updateFpsAndFS();
 }
 
+fbf.multiplyFS = function(factor) {
+	if (factor=="decrease" && FRAMESKIP >=2){
+		FRAMESKIP/=2;
+	} 
+	if (factor=="increase" && FRAMESKIP <=16) {
+		FRAMESKIP*=2;
+	}
+	fbf.updateFpsAndFS();
+}
 fbf.injectControls = function() {
-    var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i> <span> </span?";
+    var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
     var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
-    
+    var fpsAndFrameskip_html = "<b>fps:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
+	&nbsp;&nbsp;&nbsp;<b> frameskip:&nbsp;" + FRAMESKIP + "</b>";
+	
     var newButtons = document.createElement('div');
     newButtons.innerHTML = controls_html;
     newButtons.style.float = 'left';
     newButtons.style['margin-top'] = '2px';
-
+	
+	var fpsAndFrameskip = document.createElement('div');
+    fpsAndFrameskip.innerHTML = fpsAndFrameskip_html;
+    fpsAndFrameskip.style.float = 'right';
+	fpsAndFrameskip.style['margin-top'] = '2px';
+	
     var child = document.getElementsByClassName('ytp-volume-hover-area')[0];
 
     control_bar.insertBefore(newButtons, child);
-
+	control_bar.insertBefore(fpsAndFrameskip, child);
+	
+	fbf.updateFpsAndFS = function() {
+		fpsAndFrameskip_html = "<b>fps:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
+	&nbsp;&nbsp;&nbsp;<b> frameskip:&nbsp;" + FRAMESKIP + "</b>";
+		fpsAndFrameskip.innerHTML = fpsAndFrameskip_html;
+	}
+	
     var forward_button = document.getElementsByClassName("icon-to-end")[0];
     forward_button.addEventListener('click', function() {
         fbf.nextFrame(FRAMESKIP);
@@ -80,14 +104,10 @@ document.addEventListener("keydown", function(e) {
                 fbf.nextFrame(FRAMESKIP);
                 break;
             case fbf.COMMA:
-				if (FRAMESKIP >=2){
-					FRAMESKIP/=2;
-				}
+				fbf.multiplyFS("decrease");
                 break;
             case fbf.PERIOD:
-				if (FRAMESKIP <=16){
-					FRAMESKIP*=2;
-				}
+				fbf.multiplyFS("increase");
 				break;
             case fbf.P_KEY:
 				fbf.fbfPlayback();
