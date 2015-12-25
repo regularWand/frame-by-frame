@@ -24,6 +24,8 @@ behavour to the YouTube player.
 
 <b>[</b> and <b>]</b> to seek by current frameskip (default 1)
 
+* Alternatively, hold left mouseclick (forward) or the alt key (reverse) and then scroll up with the mousewheel
+
 <b><</b> and  <b>></b> to decrease or increase frameskip by a factor of 2 respectively
 
 <b>P</b> to toggle between minimum and normal playbackrate
