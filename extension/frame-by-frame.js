@@ -11,12 +11,11 @@ fbf.O_KEY = 79;
 var frameskip = 1;
 var hotkeys = true;
 var player = document.getElementById(fbf.PLAYER_ID);
-var search = document.getElementById("masthead-search-term");
-var comment = document.getElementById("watch-discussion");
 
 fbf.prevFrame = function(frameskip) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
     player.pauseVideo();
+	console.log(player.getCurrentTime());	
     player.seekBy(-frameskip * (1/fbf.FRAMES_PER_SECOND));
 }
 
@@ -103,7 +102,6 @@ if (hotkeys) {
                 break;
             case fbf.RIGHT_SQUARE_BRACKET:
                 fbf.nextFrame(frameskip);
-				console.log(document.hasFocus());
                 break;
             case fbf.COMMA:
 				fbf.multiplyFS("decrease");
@@ -123,26 +121,26 @@ if (hotkeys) {
 };
 
 document.addEventListener('wheel', function(e) {
-			if (e.deltaY < 0 && !e.altKey && e.buttons==1) {
+			if (e.deltaY < 0 && e.altKey && e.pageX >= window.innerWidth/2) {
 				fbf.nextFrame(frameskip);
 			}
-			if (e.deltaY < 0 && e.altKey) {
+			if (e.deltaY < 0 && e.altKey && e.pageX < window.innerWidth/2) {
 				fbf.prevFrame(frameskip);
 			}
 });
 
+var search = document.getElementById("masthead-search-term");
 search.addEventListener("focus", function(e) {
 	hotkeys = false;
 });
-
 search.addEventListener("blur", function(e) {
 	hotkeys = true;
 });
 
+var comment = document.getElementById("watch-discussion");
 comment.addEventListener("focus", function(e) {
 	hotkeys = false;
 }, true);
-
 comment.addEventListener("blur", function(e) {
 	hotkeys = true;
 }, true);
