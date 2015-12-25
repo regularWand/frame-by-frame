@@ -1,4 +1,4 @@
-fbf = {};
+var fbf = {};
 
 fbf.FRAMES_PER_SECOND = 25;
 fbf.PLAYER_ID = "movie_player";
@@ -9,11 +9,10 @@ fbf.PERIOD = 190;
 fbf.P_KEY = 80;
 fbf.O_KEY = 79;
 var frameskip = 1;
-var hotkeys = true
+var hotkeys = true;
 var player = document.getElementById(fbf.PLAYER_ID);
 var search = document.getElementById("masthead-search-term");
 var comment = document.getElementById("watch-discussion");
-console.log(comment);
 
 fbf.prevFrame = function(frameskip) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
@@ -78,7 +77,7 @@ fbf.injectControls = function() {
 	
 	fbf.updateFpsAndFS = function() {
 		fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
-	&nbsp;&nbsp;<b> frameskip:&nbsp;" + frameskip + "</b>";
+		&nbsp;&nbsp;<b> frameskip:&nbsp;" + frameskip + "</b>";
 		fpsAndframeskip.innerHTML = fpsAndframeskip_html;
 	}
 	
@@ -124,33 +123,26 @@ if (hotkeys) {
 };
 
 document.addEventListener('wheel', function(e) {
-            
 			if (e.deltaY < 0 && !e.altKey && e.buttons==1) {
-				console.log();
 				fbf.nextFrame(frameskip);
 			}
 			if (e.deltaY < 0 && e.altKey) {
-				console.log(e.deltaY);
 				fbf.prevFrame(frameskip);
 			}
 });
 
 search.addEventListener("focus", function(e) {
 	hotkeys = false;
-	console.log(hotkeys);
 });
 
 search.addEventListener("blur", function(e) {
 	hotkeys = true;
-	console.log(hotkeys);
 });
 
 comment.addEventListener("focus", function(e) {
 	hotkeys = false;
-	console.log(hotkeys);
 }, true);
 
 comment.addEventListener("blur", function(e) {
 	hotkeys = true;
-	console.log(hotkeys);
 }, true);
