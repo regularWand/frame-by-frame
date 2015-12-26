@@ -6,17 +6,37 @@ Description
 
 Use the buttons added to your video controls to navigate backwards and forwards frame by frame.
 
-<b>Hotkeys:</b>
+<table id="hotkeys">
+  <tr>
+	<th>Hotkey</th>
+	<th>Action</th>
+  </tr>
+  <tr>
+	<td><b>[</b> or <b>]</b></td>
+	<td>Seeks by current frameskip (default 1) in reverse or forward respectively</td>
+  </tr>
+  <tr>
+	<td><b>Shift</b> + <b>Mousewheel Up</b></td>
+	<td>Seeks by current frameskip when the cursor is in the left (reverse) or right (forward) half of the window</td>
+  </tr>
+  <tr>
+	<td><b><</b> and  <b>></b></td>
+	<td>Decrease or increase frameskip by a factor of 2 respectively</td>
+  </tr>
+  <tr>
+	<td><b>P</b></td>
+	<td>Toggles between minimum (1/4) and normal playback speed</td>
+  </tr>
+  <tr>
+	<td><b>O</b></td>
+	<td>Toggles between frame-by-frame skipping for 30 and 25/24 fps video (default 25 fps)</td>
+  </tr>
+	<tr>
+	<td><b>\</b></td>
+	<td>Toggles visibility of youtube player controls</td>
+  </tr>
+</table>
 
-<b>[</b> and <b>]</b> to seek by current frameskip (default 1)
-
-* Alternatively, hold the <b>alt</b> key and scroll up with the mousewheel on the left (reverse) or right (forward) half of the window
-
-<b><</b> and  <b>></b> to decrease or increase frameskip by a factor of 2 respectively
-
-<b>P</b> to toggle between minimum and normal playbackrate
-
-<b>O</b> to toggle between frame-by-frame skipping for 30 and 24 fps video (default 30 fps)
 
 Created by Calum J. Eadie (http://calumjeadie.com) and Tom D. Chambers (http://tomchambers.me).
 

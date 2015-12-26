@@ -16,7 +16,7 @@ var pbar = document.getElementsByClassName("ytp-progress-bar")[0];
 var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
 var shadow = document.getElementsByClassName("ytp-gradient-bottom")[0];
 var header = document.getElementById("watch-header");
-var controlsToggle = 0;
+var controlsToggle = false;
 
 fbf.prevFrame = function(frameskip) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
@@ -31,7 +31,7 @@ fbf.nextFrame = function(frameskip) {
 }
 
 fbf.fbfPlayback = function() {
-	if (player.getPlaybackRate()==0.25) {
+	if (player.getPlaybackRate()===0.25) {
 		player.setPlaybackRate(1);
 	}
 	else {
@@ -40,7 +40,7 @@ fbf.fbfPlayback = function() {
 }
 
 fbf.setFrameRate = function() {
-	if (fbf.FRAMES_PER_SECOND==25) {
+	if (fbf.FRAMES_PER_SECOND===25) {
 		fbf.FRAMES_PER_SECOND = 30;
 	}
 	else {
@@ -50,26 +50,26 @@ fbf.setFrameRate = function() {
 }
 
 fbf.multiplyFS = function(factor) {
-	if (factor=="decrease" && frameskip >=2){
+	if (factor==="decrease" && frameskip >=2){
 		frameskip/=2;
 	} 
-	if (factor=="increase" && frameskip <=16) {
+	if (factor==="increase" && frameskip <=16) {
 		frameskip*=2;
 	}
 	fbf.updateFpsAndFS();
 }
 
 fbf.hideControls= function() {
-	if (controlsToggle==0) {
+	if (!controlsToggle) {
 	pbar.style.visibility="hidden";
 	control_bar.style.visibility="hidden";
 	shadow.style.visibility="hidden";
-	controlsToggle = 1;
+	controlsToggle = true;
 	} else {
 	pbar.style.visibility="visible";
 	control_bar.style.visibility="visible";
 	shadow.style.visibility="visible";
-	controlsToggle = 0;
+	controlsToggle = false;
 	}
 }
 
@@ -118,7 +118,7 @@ fbf.injectControls = function() {
 	
 	hotkeysButton.addEventListener('click', function(){
 		newwindow=window.open("http://codepen.io/regularWand/full/eJdVep\
-		","name","height=475, width=467, top=125");
+		","name","height=510, width=467, top=125");
 		if (window.focus) {newwindow.focus()}
 	});
 }
