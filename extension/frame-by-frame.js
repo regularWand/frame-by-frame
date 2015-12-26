@@ -8,14 +8,19 @@ fbf.COMMA = 188;
 fbf.PERIOD = 190;
 fbf.P_KEY = 80;
 fbf.O_KEY = 79;
+fbf.BACKSLASH_KEY = 220;
 var frameskip = 1;
 var hotkeys = true;
 var player = document.getElementById(fbf.PLAYER_ID);
+var pbar = document.getElementsByClassName("ytp-progress-bar")[0];
+var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
+var shadow = document.getElementsByClassName("ytp-gradient-bottom")[0];
+var header = document.getElementById("watch-header");
+var controlsToggle = 0;
 
 fbf.prevFrame = function(frameskip) {
     // Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
     player.pauseVideo();
-	console.log(player.getCurrentTime());	
     player.seekBy(-frameskip * (1/fbf.FRAMES_PER_SECOND));
 }
 
@@ -53,9 +58,23 @@ fbf.multiplyFS = function(factor) {
 	}
 	fbf.updateFpsAndFS();
 }
+
+fbf.hideControls= function() {
+	if (controlsToggle==0) {
+	pbar.style.visibility="hidden";
+	control_bar.style.visibility="hidden";
+	shadow.style.visibility="hidden";
+	controlsToggle = 1;
+	} else {
+	pbar.style.visibility="visible";
+	control_bar.style.visibility="visible";
+	shadow.style.visibility="visible";
+	controlsToggle = 0;
+	}
+}
+
 fbf.injectControls = function() {
     var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
-    var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
     var fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
 	&nbsp;&nbsp;<b>Frameskip:&nbsp;" + frameskip + "</b>";
 	var hotkeysButton_html = "<i class=\"icon icon-for-hotkeys-menu\"></i>";
@@ -102,58 +121,69 @@ fbf.injectControls = function() {
 		","name","height=475, width=467, top=125");
 		if (window.focus) {newwindow.focus()}
 	});
+	
+	//attempted solution to hotkey lockout after using alt + mousewheel to frame skip
+	/*document.addEventListener('keyup', function(e) {
+		if (e.which==18) {
+			window.setTimeout(forward_button.click(), 200);
+			console.log("called");
+		}
+	});*/
 }
 
 if (document.getElementsByClassName("ytp-chrome-controls")[0]) {
     fbf.injectControls();
+	
+	document.addEventListener("keydown", function(e) {
+	if (hotkeys) {
+			switch(e.which) {
+				case fbf.LEFT_SQUARE_BRACKET:
+					fbf.prevFrame(frameskip);
+					break;
+				case fbf.RIGHT_SQUARE_BRACKET:
+					fbf.nextFrame(frameskip);
+					break;
+				case fbf.COMMA:
+					fbf.multiplyFS("decrease");
+					break;
+				case fbf.PERIOD:
+					fbf.multiplyFS("increase");
+					break;
+				case fbf.P_KEY:
+					fbf.fbfPlayback();
+					break;
+				case fbf.O_KEY:
+					fbf.setFrameRate();
+					break;
+				case fbf.BACKSLASH_KEY:
+					fbf.hideControls();
+					break;
+			}
+		}
+	  }, false);
 
-document.addEventListener("keydown", function(e) {
-if (hotkeys) {
-        switch(e.which) {
-            case fbf.LEFT_SQUARE_BRACKET:
-                fbf.prevFrame(frameskip);
-                break;
-            case fbf.RIGHT_SQUARE_BRACKET:
-                fbf.nextFrame(frameskip);
-                break;
-            case fbf.COMMA:
-				fbf.multiplyFS("decrease");
-                break;
-            case fbf.PERIOD:
-				fbf.multiplyFS("increase");
-				break;
-            case fbf.P_KEY:
-				fbf.fbfPlayback();
-				break;
-            case fbf.O_KEY:
-				fbf.setFrameRate();
-                break;
-        }
-	}
-  }, false);
+	document.addEventListener('wheel', function(e) {
+		if (e.deltaY < 0 && e.altKey && e.pageX >= window.innerWidth/2) {
+			fbf.nextFrame(frameskip);
+		}
+		if (e.deltaY < 0 && e.altKey && e.pageX < window.innerWidth/2) {
+			fbf.prevFrame(frameskip);
+		}
+	});
+
+	var search = document.getElementById("masthead-search-term");
+	search.addEventListener("focus", function(e) {
+		hotkeys = false;
+	});
+	search.addEventListener("blur", function(e) {
+		hotkeys = true;
+	});
+
+	var comment = document.getElementById("watch-discussion");
+	comment.addEventListener("focus", function(e) {
+		hotkeys = false;
+	}, true);
+	comment.addEventListener("blur", function(e) {
+		hotkeys = true;
+	}, true);
 };
-
-document.addEventListener('wheel', function(e) {
-			if (e.deltaY < 0 && e.altKey && e.pageX >= window.innerWidth/2) {
-				fbf.nextFrame(frameskip);
-			}
-			if (e.deltaY < 0 && e.altKey && e.pageX < window.innerWidth/2) {
-				fbf.prevFrame(frameskip);
-			}
-});
-
-var search = document.getElementById("masthead-search-term");
-search.addEventListener("focus", function(e) {
-	hotkeys = false;
-});
-search.addEventListener("blur", function(e) {
-	hotkeys = true;
-});
-
-var comment = document.getElementById("watch-discussion");
-comment.addEventListener("focus", function(e) {
-	hotkeys = false;
-}, true);
-comment.addEventListener("blur", function(e) {
-	hotkeys = true;
-}, true);
