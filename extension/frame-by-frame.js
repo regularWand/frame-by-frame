@@ -57,12 +57,18 @@ fbf.injectControls = function() {
     var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
     var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
     var fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
-	&nbsp;&nbsp;<b> frameskip:&nbsp;" + frameskip + "</b>";
-	
+	&nbsp;&nbsp;<b>Frameskip:&nbsp;" + frameskip + "</b>";
+	var hotkeysButton_html = "<i class=\"icon icon-for-hotkeys-menu\"></i>";
+		
     var newButtons = document.createElement('div');
     newButtons.innerHTML = controls_html;
     newButtons.style.float = 'left';
     newButtons.style['margin-top'] = '2px';
+	
+	var hotkeysButton = document.createElement('div');
+    hotkeysButton.innerHTML = hotkeysButton_html;
+    hotkeysButton.style.float = 'right';
+	hotkeysButton.style['margin-top'] = '2px';
 	
 	var fpsAndframeskip = document.createElement('div');
     fpsAndframeskip.innerHTML = fpsAndframeskip_html;
@@ -70,13 +76,14 @@ fbf.injectControls = function() {
 	fpsAndframeskip.style['margin-top'] = '2px';
 	
     var child = document.getElementsByClassName('ytp-volume-hover-area')[0];
-
+	
     control_bar.insertBefore(newButtons, child);
+	control_bar.insertBefore(hotkeysButton, child);
 	control_bar.insertBefore(fpsAndframeskip, child);
 	
 	fbf.updateFpsAndFS = function() {
 		fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
-		&nbsp;&nbsp;<b> frameskip:&nbsp;" + frameskip + "</b>";
+		&nbsp;&nbsp;<b>Frameskip:&nbsp;" + frameskip + "</b>";
 		fpsAndframeskip.innerHTML = fpsAndframeskip_html;
 	}
 	
@@ -89,6 +96,12 @@ fbf.injectControls = function() {
     back_button.addEventListener('click', function() {
         fbf.prevFrame(frameskip);
     });
+	
+	hotkeysButton.addEventListener('click', function(){
+		newwindow=window.open("http://codepen.io/regularWand/full/eJdVep\
+		","name","height=475, width=467, top=125");
+		if (window.focus) {newwindow.focus()}
+	});
 }
 
 if (document.getElementsByClassName("ytp-chrome-controls")[0]) {
