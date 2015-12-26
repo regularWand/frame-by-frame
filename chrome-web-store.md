@@ -10,7 +10,7 @@ Use the buttons added to your video controls to navigate backwards and forwards 
 
 <b>[</b> and <b>]</b> to seek by current frameskip (default 1)
 
-* Alternatively, hold left mouseclick (forward) or the alt key (reverse) and then scroll up with the mousewheel
+* Alternatively, hold the <b>alt</b> key and scroll up with the mousewheel on the left (reverse) or right (forward) half of the window
 
 <b><</b> and  <b>></b> to decrease or increase frameskip by a factor of 2 respectively
 
