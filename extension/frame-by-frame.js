@@ -121,14 +121,6 @@ fbf.injectControls = function() {
 		","name","height=475, width=467, top=125");
 		if (window.focus) {newwindow.focus()}
 	});
-	
-	//attempted solution to hotkey lockout after using alt + mousewheel to frame skip
-	/*document.addEventListener('keyup', function(e) {
-		if (e.which==18) {
-			window.setTimeout(forward_button.click(), 200);
-			console.log("called");
-		}
-	});*/
 }
 
 if (document.getElementsByClassName("ytp-chrome-controls")[0]) {
@@ -163,10 +155,10 @@ if (document.getElementsByClassName("ytp-chrome-controls")[0]) {
 	  }, false);
 
 	document.addEventListener('wheel', function(e) {
-		if (e.deltaY < 0 && e.altKey && e.pageX >= window.innerWidth/2) {
+		if (e.deltaX < 0 && e.shiftKey && e.pageX >= window.innerWidth/2) {
 			fbf.nextFrame(frameskip);
 		}
-		if (e.deltaY < 0 && e.altKey && e.pageX < window.innerWidth/2) {
+		if (e.deltaX < 0 && e.shiftKey && e.pageX < window.innerWidth/2) {
 			fbf.prevFrame(frameskip);
 		}
 	});
