@@ -1,6 +1,5 @@
 frameByFrame = function() {
 	var fbf = {};
-
 	fbf.FRAMES_PER_SECOND = 25;
 	fbf.PLAYER_ID = "movie_player";
 	fbf.LEFT_SQUARE_BRACKET = 219;
@@ -10,16 +9,14 @@ frameByFrame = function() {
 	fbf.P_KEY = 80;
 	fbf.O_KEY = 79;
 	fbf.BACKSLASH_KEY = 220;
+	
 	var frameskip = 1;
 	var hotkeys = true;
 	var player = document.getElementById(fbf.PLAYER_ID);
-	var pbar = document.getElementsByClassName("ytp-progress-bar")[0];
-	var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
-	var controlsToggle = false;
-	var shadow = document.getElementsByClassName("ytp-gradient-bottom")[0];
 	var header = document.getElementById("watch-header");
-	var brand = document.getElementsByClassName("iv-branding")[0];
+	var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
 
+	
 	fbf.prevFrame = function(frameskip) {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
 		player.pauseVideo();
@@ -60,8 +57,14 @@ frameByFrame = function() {
 		}
 		fbf.updateFpsAndFS();
 	}
-
+	
+	var shadow = document.getElementsByClassName("ytp-gradient-bottom")[0];
+	var pbar = document.getElementsByClassName("ytp-progress-bar")[0];
+	var controlsToggle = false;
 	fbf.hideControls= function() {
+		if (!brand) {
+			var brand = document.getElementsByClassName("iv-branding")[0];
+		}
 		if (!controlsToggle) {
 		pbar.style.visibility="hidden";
 		control_bar.style.visibility="hidden";
