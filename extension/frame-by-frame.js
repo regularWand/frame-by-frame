@@ -12,6 +12,8 @@ frameByFrame = function() {
 	
 	var frameskip = 1;
 	var hotkeys = true;
+	var sessionToggle = true;
+	var controlsToggle = false;
 	var player = document.getElementById(fbf.PLAYER_ID);
 	var header = document.getElementById("watch-header");
 	var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
@@ -57,44 +59,45 @@ frameByFrame = function() {
 		fbf.updateFpsAndFS();
 	}
 	
-	var shadow = document.getElementsByClassName("ytp-gradient-bottom")[0];
-	var pbar = document.getElementsByClassName("ytp-progress-bar")[0];
-	var controlsToggle = false;
-	fbf.hideControls= function() {
+	fbf.controlsVisibility = function(visibility) {
 		if (!brand) {
 			var brand = document.getElementsByClassName("iv-branding")[0];
 		}
-		if (!controlsToggle) {
-		pbar.style.visibility="hidden";
-		control_bar.style.visibility="hidden";
-		shadow.style.visibility="hidden";
+		pbar.style.visibility=visibility;
+		control_bar.style.visibility=visibility;
+		shadow.style.visibility=visibility;
 			if (brand) {
-				brand.style.visibility="hidden";
+				brand.style.visibility=visibility;
 			}
-		controlsToggle = true;
-		} else {
-		pbar.style.visibility="visible";
-		control_bar.style.visibility="visible";
-		shadow.style.visibility="visible";
-			if (brand) {
-				brand.style.visibility="visible";
-			}
-		controlsToggle = false;
-		}
 	}
 	
-	//Ensures player control elements are visible when
+	//Ensures player control elements are visible after
 	//navigating Youtube via session links
-	var sessionlink = document.getElementsByClassName("yt-uix-sessionlink");
-	for (var i = 0; i < sessionlink.length; i++) {
-		sessionlink[i].addEventListener("mouseup", function() {
-			pbar.style.visibility="visible";
-			control_bar.style.visibility="visible";
-			shadow.style.visibility="visible";
-				if (brand) {
-					brand.style.visibility="visible";
-				}
-		});
+	fbf.addSessionLinkListeners = function() {
+		var sessionlink = document.getElementsByClassName("yt-uix-sessionlink");
+			for (var i = 0; i < sessionlink.length; i++) {
+				sessionlink[i].addEventListener("mouseup", function() {
+					fbf.controlsVisibility("visible");
+					controlsToggle = false;
+					sessionToggle = true;
+				});
+			}
+	}
+	
+	var shadow = document.getElementsByClassName("ytp-gradient-bottom")[0];
+	var pbar = document.getElementsByClassName("ytp-progress-bar")[0];
+	fbf.toggleControls = function() {
+		if (!controlsToggle) {
+			fbf.controlsVisibility("hidden");
+			if (sessionToggle) {
+				fbf.addSessionLinkListeners();
+				sessionToggle = false;
+			}
+			controlsToggle = true;
+		} else {
+			fbf.controlsVisibility("visible");
+			controlsToggle = false;
+		}
 	}
 	
 	fbf.injectControls = function() {
@@ -172,7 +175,7 @@ frameByFrame = function() {
 						fbf.setFrameRate();
 						break;
 					case fbf.BACKSLASH_KEY:
-						fbf.hideControls();
+						fbf.toggleControls();
 						break;
 				}
 			}
