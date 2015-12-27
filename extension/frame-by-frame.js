@@ -15,7 +15,6 @@ frameByFrame = function() {
 	var player = document.getElementById(fbf.PLAYER_ID);
 	var header = document.getElementById("watch-header");
 	var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
-
 	
 	fbf.prevFrame = function(frameskip) {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
@@ -83,7 +82,21 @@ frameByFrame = function() {
 		controlsToggle = false;
 		}
 	}
-
+	
+	//Ensures player control elements are visible when
+	//navigating Youtube via session links
+	var sessionlink = document.getElementsByClassName("yt-uix-sessionlink");
+	for (var i = 0; i < sessionlink.length; i++) {
+		sessionlink[i].addEventListener("mouseup", function() {
+			pbar.style.visibility="visible";
+			control_bar.style.visibility="visible";
+			shadow.style.visibility="visible";
+				if (brand) {
+					brand.style.visibility="visible";
+				}
+		});
+	}
+	
 	fbf.injectControls = function() {
 		var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
 		var fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
