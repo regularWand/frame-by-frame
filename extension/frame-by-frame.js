@@ -59,6 +59,7 @@ frameByFrame = function() {
 		fbf.updateFpsAndFS();
 	}
 	
+	//The following three functions work together to toggle the video controls
 	fbf.controlsVisibility = function(visibility) {
 		if (!brand) {
 			var brand = document.getElementsByClassName("iv-branding")[0];
@@ -72,7 +73,8 @@ frameByFrame = function() {
 	}
 	
 	//Ensures player control elements are visible after
-	//navigating Youtube via session links
+	//navigating Youtube via session links. Anything else that needs to be
+	//reset when following session links could go here
 	fbf.addSessionLinkListeners = function() {
 		var sessionlink = document.getElementsByClassName("yt-uix-sessionlink");
 			for (var i = 0; i < sessionlink.length; i++) {
@@ -190,6 +192,8 @@ frameByFrame = function() {
 			}
 		});
 
+		//The following two event listeners disable the hotkeys
+		//when input fields on a video page have focus
 		var search = document.getElementById("masthead-search-term");
 		search.addEventListener("focus", function(e) {
 			hotkeys = false;
