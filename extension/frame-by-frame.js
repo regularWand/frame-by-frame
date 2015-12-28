@@ -14,17 +14,20 @@ frameByFrame = function() {
 	var hotkeys = true;
 	var sessionToggle = true;
 	var controlsToggle = false;
+	var fbfPlayback = true;
+	var fbfForward;
+	var fbfReverse;
 	var player = document.getElementById(fbf.PLAYER_ID);
 	var header = document.getElementById("watch-header");
 	var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
 	
-	fbf.prevFrame = function(frameskip) {
+	fbf.prevFrame = function() {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
 		player.pauseVideo();
 		player.seekBy(-frameskip * (1/fbf.FRAMES_PER_SECOND));
 	}
 
-	fbf.nextFrame = function(frameskip) {
+	fbf.nextFrame = function() {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
 		player.pauseVideo();
 		player.seekBy(frameskip * (1/fbf.FRAMES_PER_SECOND));
@@ -59,6 +62,7 @@ frameByFrame = function() {
 		fbf.updateFpsAndFS();
 	}
 	
+	//The following three functions work together to toggle the video controls
 	fbf.controlsVisibility = function(visibility) {
 		if (!brand) {
 			var brand = document.getElementsByClassName("iv-branding")[0];
@@ -66,13 +70,14 @@ frameByFrame = function() {
 		pbar.style.visibility=visibility;
 		control_bar.style.visibility=visibility;
 		shadow.style.visibility=visibility;
-			if (brand) {
-				brand.style.visibility=visibility;
-			}
+		if (brand) {
+			brand.style.visibility=visibility;
+		}
 	}
 	
 	//Ensures player control elements are visible after
-	//navigating Youtube via session links
+	//navigating Youtube via session links. Anything else that needs to be
+	//reset when following session links could go here
 	fbf.addSessionLinkListeners = function() {
 		var sessionlink = document.getElementsByClassName("yt-uix-sessionlink");
 			for (var i = 0; i < sessionlink.length; i++) {
@@ -80,6 +85,8 @@ frameByFrame = function() {
 					fbf.controlsVisibility("visible");
 					controlsToggle = false;
 					sessionToggle = true;
+					
+					fbf.resetIntervals();
 				});
 			}
 	}
@@ -135,12 +142,12 @@ frameByFrame = function() {
 		
 		var forward_button = document.getElementsByClassName("icon-to-end")[0];
 		forward_button.addEventListener('click', function() {
-			fbf.nextFrame(frameskip);
+			fbf.nextFrame();
 		});
 
 		var back_button = document.getElementsByClassName("icon-to-start")[0];
 		back_button.addEventListener('click', function() {
-			fbf.prevFrame(frameskip);
+			fbf.prevFrame();
 		});
 		
 		hotkeysButton.addEventListener('click', function(){
@@ -150,17 +157,50 @@ frameByFrame = function() {
 		});
 	}
 
+	fbf.resetIntervals = function() {
+		if (fbfForward) {
+			clearInterval(fbfForward);
+		}
+		if (fbfReverse) {
+			clearInterval(fbfReverse);
+		}
+		fbfPlayback = true;
+	}
+	
+	fbf.fbfInterval = function(direction) {
+		if (fbfPlayback===true) {
+			if (direction==="reverse") {
+				fbfReverse = setInterval(fbf.prevFrame, 500);
+			} else if (direction==="forward") {
+				fbfForward = setInterval(fbf.nextFrame, 500);
+			}
+			fbfPlayback = false;
+			if (sessionToggle) {
+				fbf.addSessionLinkListeners();
+				sessionToggle = false;
+			}
+		} else {
+			fbf.resetIntervals();
+		}
+	}
+	
 	if (document.getElementsByClassName("ytp-chrome-controls")[0]) {
 		fbf.injectControls();
 		
 		document.addEventListener("keydown", function(e) {
-		if (hotkeys) {
+			if (hotkeys) {
 				switch(e.which) {
-					case fbf.LEFT_SQUARE_BRACKET:
-						fbf.prevFrame(frameskip);
+					case !e.altKey && fbf.LEFT_SQUARE_BRACKET:
+						fbf.prevFrame();
 						break;
-					case fbf.RIGHT_SQUARE_BRACKET:
-						fbf.nextFrame(frameskip);
+					case !e.altKey && fbf.RIGHT_SQUARE_BRACKET:
+						fbf.nextFrame();
+						break;
+					case e.altKey && fbf.LEFT_SQUARE_BRACKET:
+						fbf.fbfInterval("reverse");
+						break;
+					case e.altKey && fbf.RIGHT_SQUARE_BRACKET:
+						fbf.fbfInterval("forward");
 						break;
 					case fbf.COMMA:
 						fbf.multiplyFS("decrease");
@@ -183,13 +223,15 @@ frameByFrame = function() {
 
 		document.addEventListener('wheel', function(e) {
 			if (e.deltaX < 0 && e.shiftKey && e.pageX >= window.innerWidth/2) {
-				fbf.nextFrame(frameskip);
+				fbf.nextFrame();
 			}
 			if (e.deltaX < 0 && e.shiftKey && e.pageX < window.innerWidth/2) {
-				fbf.prevFrame(frameskip);
+				fbf.prevFrame();
 			}
 		});
 
+		//The following two event listeners disable the hotkeys
+		//when input fields on a video page have focus
 		var search = document.getElementById("masthead-search-term");
 		search.addEventListener("focus", function(e) {
 			hotkeys = false;
