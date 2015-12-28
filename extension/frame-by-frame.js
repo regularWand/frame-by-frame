@@ -8,7 +8,8 @@ frameByFrame = function() {
 	fbf.PERIOD = 190;
 	fbf.P_KEY = 80;
 	fbf.O_KEY = 79;
-	fbf.BACKSLASH_KEY = 220;
+	fbf.BACKSLASH = 220;
+	fbf.APOSTROPHE = 222;
 	
 	var frameskip = 1;
 	var hotkeys = true;
@@ -107,6 +108,44 @@ frameByFrame = function() {
 		}
 	}
 	
+	//The following three functions work together to capture and save video frames
+	
+	//https://gist.github.com/kosso/4246840
+	function dataURItoBlob(dataURI) {
+		var binary = atob(dataURI.split(',')[1]);
+		var array = [];
+		for(var i = 0; i < binary.length; i++) {
+			array.push(binary.charCodeAt(i));
+		}
+    return new Blob([new Uint8Array(array)], {type: 'image/png'});
+	}
+	
+	fbf.drawFrame = function(video) {
+		var w = video.videoWidth
+		var h = video.videoHeight
+		var canvas = document.createElement("canvas");
+			canvas.width = w;
+			canvas.height = h;
+		var ctx = canvas.getContext("2d");
+			ctx.drawImage(video, 0, 0, w, h);
+		return canvas;
+	}
+	
+	fbf.captureFrame = function() {
+		var video = document.getElementsByClassName("html5-main-video")[0];
+		var canvas = fbf.drawFrame(video);
+		var dataURL = canvas.toDataURL();
+		var blob = dataURItoBlob(dataURL);
+		//https://jsfiddle.net/Jan_Miksovsky/yy7Zs/
+		var urlCreator = window.URL || window.webkitURL;
+		var imageURL = urlCreator.createObjectURL(blob);
+		frameWindow = window.open("", "Frame Captured");
+		var html = "<head><title>Frame Captured</title></head>\
+		<body style=\"margin: 0px;\"><img src=\"" + imageURL + "\"></body>";
+		frameWindow.document.body.innerHTML = html;
+		if (window.focus) {frameWindow.focus()}
+	}
+	
 	fbf.injectControls = function() {
 		var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
 		var fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
@@ -151,7 +190,7 @@ frameByFrame = function() {
 		});
 		
 		hotkeysButton.addEventListener('click', function(){
-			newwindow=window.open("http://codepen.io/regularWand/full/eJdVep\
+			newwindow = window.open("http://codepen.io/regularWand/full/eJdVep\
 			","name","height=510, width=467, top=125");
 			if (window.focus) {newwindow.focus()}
 		});
@@ -214,8 +253,11 @@ frameByFrame = function() {
 					case fbf.O_KEY:
 						fbf.setFrameRate();
 						break;
-					case fbf.BACKSLASH_KEY:
+					case fbf.BACKSLASH:
 						fbf.toggleControls();
+						break;
+					case fbf.APOSTROPHE:
+						fbf.captureFrame();
 						break;
 				}
 			}
