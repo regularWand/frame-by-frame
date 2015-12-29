@@ -16,7 +16,6 @@ frameByFrame = function() {
 	var controlsToggle = false;
 	var player = document.getElementById(fbf.PLAYER_ID);
 	var header = document.getElementById("watch-header");
-	var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
 	
 	fbf.prevFrame = function(frameskip) {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
@@ -104,6 +103,7 @@ frameByFrame = function() {
 	
 	fbf.injectControls = function() {
 		var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
+		control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
 		var fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
 		&nbsp;&nbsp;<b>Frameskip:&nbsp;" + frameskip + "</b>";
 		var hotkeysButton_html = "<i class=\"icon icon-for-hotkeys-menu\"></i>";
