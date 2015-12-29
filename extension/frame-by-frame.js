@@ -8,22 +8,31 @@ frameByFrame = function() {
 	fbf.PERIOD = 190;
 	fbf.P_KEY = 80;
 	fbf.O_KEY = 79;
-	fbf.BACKSLASH_KEY = 220;
+	fbf.BACKSLASH = 220;
+	fbf.APOSTROPHE = 222;
 	
 	var frameskip = 1;
 	var hotkeys = true;
 	var sessionToggle = true;
 	var controlsToggle = false;
+	var fbfPlayback = true;
+	var fbfForward;
+	var fbfReverse;
+	var frameWindow;
+	var continueCapture = false;
+	var imageURL = [];
+	var imageURLCounter = 0;
+	var frameNumberSaved = 0;
 	var player = document.getElementById(fbf.PLAYER_ID);
 	var header = document.getElementById("watch-header");
 	
-	fbf.prevFrame = function(frameskip) {
+	fbf.prevFrame = function() {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
 		player.pauseVideo();
 		player.seekBy(-frameskip * (1/fbf.FRAMES_PER_SECOND));
 	}
 
-	fbf.nextFrame = function(frameskip) {
+	fbf.nextFrame = function() {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
 		player.pauseVideo();
 		player.seekBy(frameskip * (1/fbf.FRAMES_PER_SECOND));
@@ -66,9 +75,9 @@ frameByFrame = function() {
 		pbar.style.visibility=visibility;
 		control_bar.style.visibility=visibility;
 		shadow.style.visibility=visibility;
-			if (brand) {
-				brand.style.visibility=visibility;
-			}
+		if (brand) {
+			brand.style.visibility=visibility;
+		}
 	}
 	
 	//Ensures player control elements are visible after
@@ -81,6 +90,10 @@ frameByFrame = function() {
 					fbf.controlsVisibility("visible");
 					controlsToggle = false;
 					sessionToggle = true;
+					
+					fbf.resetIntervals();
+					
+					var frameWindow;
 				});
 			}
 	}
@@ -98,6 +111,65 @@ frameByFrame = function() {
 		} else {
 			fbf.controlsVisibility("visible");
 			controlsToggle = false;
+		}
+	}
+	
+	//The following three functions work together to capture and save video frames
+	
+	//https://gist.github.com/kosso/4246840
+	function dataURItoBlob(dataURI) {
+		var binary = atob(dataURI.split(',')[1]);
+		var array = [];
+		for(var i = 0; i < binary.length; i++) {
+			array.push(binary.charCodeAt(i));
+		}
+    return new Blob([new Uint8Array(array)], {type: 'image/png'});
+	}
+	
+	fbf.drawFrame = function(video) {
+		var w = video.videoWidth
+		var h = video.videoHeight
+		var canvas = document.createElement("canvas");
+			canvas.width = w;
+			canvas.height = h;
+		var ctx = canvas.getContext("2d");
+			ctx.drawImage(video, 0, 0, w, h);
+		return canvas;
+	}
+	
+	fbf.saveFrame = function(imageURL) {
+		for (var i = 0; i < imageURL.length; i++) {
+			var a = document.createElement("a");
+			a.href = imageURL[i];
+			a.download = "Frame_" + i;
+			a.click();
+		}
+	}
+	
+	fbf.captureFrame = function() {
+			var video = document.getElementsByClassName("html5-main-video")[0];
+			var canvas = fbf.drawFrame(video);
+			//https://code.google.com/p/chromium/issues/detail?id=67587
+			var dataURL = canvas.toDataURL();
+			var blob = dataURItoBlob(dataURL);
+			//https://jsfiddle.net/Jan_Miksovsky/yy7Zs/
+			if (frameWindow && frameWindow.closed) {
+				imageURL = [];
+				frameNumberSaved = 0;
+			}
+			var urlCreator = window.URL || window.webkitURL;
+			imageURL[frameNumberSaved] = urlCreator.createObjectURL(blob);
+			var html = "<div style=\"padding:5px;\"><b><figcaption>Frame \
+			" + frameNumberSaved + " captured at " + video.getCurrentTime() + "\
+			</figcaption><b><img src=\"" + imageURL[frameNumberSaved] + "\"></div>";
+		if (!frameWindow || frameWindow.closed) {
+			player.pauseVideo();
+			frameWindow = window.open("", "Frame Captured");
+			frameWindow.document.body.innerHTML = html;
+			frameNumberSaved++;
+		} else {
+			frameWindow.document.body.innerHTML += html;
+			frameNumberSaved++;
 		}
 	}
 	
@@ -137,32 +209,65 @@ frameByFrame = function() {
 		
 		var forward_button = document.getElementsByClassName("icon-to-end")[0];
 		forward_button.addEventListener('click', function() {
-			fbf.nextFrame(frameskip);
+			fbf.nextFrame();
 		});
 
 		var back_button = document.getElementsByClassName("icon-to-start")[0];
 		back_button.addEventListener('click', function() {
-			fbf.prevFrame(frameskip);
+			fbf.prevFrame();
 		});
 		
 		hotkeysButton.addEventListener('click', function(){
-			newwindow=window.open("http://codepen.io/regularWand/full/eJdVep\
+			newwindow = window.open("http://codepen.io/regularWand/full/eJdVep\
 			","name","height=510, width=467, top=125");
 			if (window.focus) {newwindow.focus()}
 		});
 	}
 
+	fbf.resetIntervals = function() {
+		if (fbfForward) {
+			clearInterval(fbfForward);
+		}
+		if (fbfReverse) {
+			clearInterval(fbfReverse);
+		}
+		fbfPlayback = true;
+	}
+	
+	fbf.fbfInterval = function(direction) {
+		if (fbfPlayback===true) {
+			if (direction==="reverse") {
+				fbfReverse = setInterval(fbf.prevFrame, 500);
+			} else if (direction==="forward") {
+				fbfForward = setInterval(fbf.nextFrame, 500);
+			}
+			fbfPlayback = false;
+			if (sessionToggle) {
+				fbf.addSessionLinkListeners();
+				sessionToggle = false;
+			}
+		} else {
+			fbf.resetIntervals();
+		}
+	}
+	
 	if (document.getElementsByClassName("ytp-chrome-controls")[0]) {
 		fbf.injectControls();
 		
 		document.addEventListener("keydown", function(e) {
-		if (hotkeys) {
+			if (hotkeys) {
 				switch(e.which) {
-					case fbf.LEFT_SQUARE_BRACKET:
-						fbf.prevFrame(frameskip);
+					case !e.altKey && fbf.LEFT_SQUARE_BRACKET:
+						fbf.prevFrame();
 						break;
-					case fbf.RIGHT_SQUARE_BRACKET:
-						fbf.nextFrame(frameskip);
+					case !e.altKey && fbf.RIGHT_SQUARE_BRACKET:
+						fbf.nextFrame();
+						break;
+					case e.altKey && fbf.LEFT_SQUARE_BRACKET:
+						fbf.fbfInterval("reverse");
+						break;
+					case e.altKey && fbf.RIGHT_SQUARE_BRACKET:
+						fbf.fbfInterval("forward");
 						break;
 					case fbf.COMMA:
 						fbf.multiplyFS("decrease");
@@ -176,8 +281,14 @@ frameByFrame = function() {
 					case fbf.O_KEY:
 						fbf.setFrameRate();
 						break;
-					case fbf.BACKSLASH_KEY:
+					case fbf.BACKSLASH:
 						fbf.toggleControls();
+						break;
+					case !e.altKey && fbf.APOSTROPHE:
+						fbf.captureFrame();
+						break;
+					case e.altKey && fbf.APOSTROPHE:
+						fbf.saveFrame(imageURL);
 						break;
 				}
 			}
@@ -185,10 +296,10 @@ frameByFrame = function() {
 
 		document.addEventListener('wheel', function(e) {
 			if (e.deltaX < 0 && e.shiftKey && e.pageX >= window.innerWidth/2) {
-				fbf.nextFrame(frameskip);
+				fbf.nextFrame();
 			}
 			if (e.deltaX < 0 && e.shiftKey && e.pageX < window.innerWidth/2) {
-				fbf.prevFrame(frameskip);
+				fbf.prevFrame();
 			}
 		});
 
