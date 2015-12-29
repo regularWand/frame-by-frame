@@ -8,7 +8,7 @@
         "48": "icon-48.png",
         "128": "icon-128.png"
     },
-    "author": "Calum J. Eadie and Tom D. Chambers",
+    "author": "Calum J. Eadie, regularWand and Tom D. Chambers",
     "content_scripts": [
         {
             "matches": ["http://www.youtube.com/watch*", "https://www.youtube.com/watch*"],
