@@ -18,6 +18,11 @@ frameByFrame = function() {
 	var fbfPlayback = true;
 	var fbfForward;
 	var fbfReverse;
+	var frameWindow;
+	var continueCapture = false;
+	var imageURL = [];
+	var imageURLCounter = 0;
+	var frameNumberSaved = 0;
 	var player = document.getElementById(fbf.PLAYER_ID);
 	var header = document.getElementById("watch-header");
 	var control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
@@ -88,6 +93,8 @@ frameByFrame = function() {
 					sessionToggle = true;
 					
 					fbf.resetIntervals();
+					
+					var frameWindow;
 				});
 			}
 	}
@@ -131,19 +138,40 @@ frameByFrame = function() {
 		return canvas;
 	}
 	
+	fbf.saveFrame = function(imageURL) {
+		for (var i = 0; i < imageURL.length; i++) {
+			var a = document.createElement("a");
+			a.href = imageURL[i];
+			a.download = "Frame_" + i;
+			a.click();
+		}
+	}
+	
 	fbf.captureFrame = function() {
-		var video = document.getElementsByClassName("html5-main-video")[0];
-		var canvas = fbf.drawFrame(video);
-		var dataURL = canvas.toDataURL();
-		var blob = dataURItoBlob(dataURL);
-		//https://jsfiddle.net/Jan_Miksovsky/yy7Zs/
-		var urlCreator = window.URL || window.webkitURL;
-		var imageURL = urlCreator.createObjectURL(blob);
-		frameWindow = window.open("", "Frame Captured");
-		var html = "<head><title>Frame Captured</title></head>\
-		<body style=\"margin: 0px;\"><img src=\"" + imageURL + "\"></body>";
-		frameWindow.document.body.innerHTML = html;
-		if (window.focus) {frameWindow.focus()}
+			var video = document.getElementsByClassName("html5-main-video")[0];
+			var canvas = fbf.drawFrame(video);
+			//https://code.google.com/p/chromium/issues/detail?id=67587
+			var dataURL = canvas.toDataURL();
+			var blob = dataURItoBlob(dataURL);
+			//https://jsfiddle.net/Jan_Miksovsky/yy7Zs/
+			if (frameWindow && frameWindow.closed) {
+				imageURL = [];
+				frameNumberSaved = 0;
+			}
+			var urlCreator = window.URL || window.webkitURL;
+			imageURL[frameNumberSaved] = urlCreator.createObjectURL(blob);
+			var html = "<div style=\"padding:5px;\"><b><figcaption>Frame \
+			" + frameNumberSaved + " captured at " + video.getCurrentTime() + "\
+			</figcaption><b><img src=\"" + imageURL[frameNumberSaved] + "\"></div>";
+		if (!frameWindow || frameWindow.closed) {
+			player.pauseVideo();
+			frameWindow = window.open("", "Frame Captured");
+			frameWindow.document.body.innerHTML = html;
+			frameNumberSaved++;
+		} else {
+			frameWindow.document.body.innerHTML += html;
+			frameNumberSaved++;
+		}
 	}
 	
 	fbf.injectControls = function() {
@@ -256,8 +284,11 @@ frameByFrame = function() {
 					case fbf.BACKSLASH:
 						fbf.toggleControls();
 						break;
-					case fbf.APOSTROPHE:
+					case !e.altKey && fbf.APOSTROPHE:
 						fbf.captureFrame();
+						break;
+					case e.altKey && fbf.APOSTROPHE:
+						fbf.saveFrame(imageURL);
 						break;
 				}
 			}
