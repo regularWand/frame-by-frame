@@ -67,6 +67,14 @@ frameByFrame = function() {
 		fbf.updateFpsAndFS();
 	}
 	
+	fbf.getVideoTime = function(video) {
+		var videoCurrentTime = document.getElementsByClassName("ytp-time-current")[0].innerHTML;
+		var videoDuration = document.getElementsByClassName("ytp-time-duration")[0].innerHTML;
+		var videoTime = videoCurrentTime + "/" + videoDuration;
+		//TODO: Add calculation for current frame number
+		return videoTime;
+	}
+	
 	//The following three functions work together to toggle the video controls
 	fbf.controlsVisibility = function(visibility) {
 		if (!brand) {
@@ -159,16 +167,24 @@ frameByFrame = function() {
 			}
 			var urlCreator = window.URL || window.webkitURL;
 			imageURL[frameNumberSaved] = urlCreator.createObjectURL(blob);
-			var html = "<div style=\"padding:5px;\"><b><figcaption>Frame \
-			" + frameNumberSaved + " captured at " + video.getCurrentTime() + "\
-			</figcaption><b><img src=\"" + imageURL[frameNumberSaved] + "\"></div>";
+			var bodyHtml = "<div class=\"frame-div\"><strong><figcaption class=\"fig-caption\">Frame \
+			" + frameNumberSaved + " captured at " + fbf.getVideoTime(video) + "\
+			</figcaption><strong><img src=\"" + imageURL[frameNumberSaved] + "\"></div>";
 		if (!frameWindow || frameWindow.closed) {
 			player.pauseVideo();
 			frameWindow = window.open("", "Frame Captured");
-			frameWindow.document.body.innerHTML = html;
+			var headHtml = "<head><style>.frame-div { font-family: \"Trebuchet MS\", Arial,\
+			Helvetica, sans-serif; background-color: rgb(179,0,0); padding: 5px;\
+			border-style: solid; border-width: 2px; width: -webkit-fit-content} .fig-caption\
+			{color: rgb(240,240,240);} ::-webkit-scrollbar {width: 6px;height: 6px;}\
+			::-webkit-scrollbar-button {width: 0px;height: 0px;}::-webkit-scrollbar-thumb\
+			{background: #e1e1e1;border: 0px none #ffffff;border-radius: 50px;}\
+			::-webkit-scrollbar-corner {background: transparent;}<head><style>";
+			frameWindow.document.head.innerHTML = headHtml;
+			frameWindow.document.body.outerHTML = "<body style=\"margin: 0px;\">" + bodyHtml + "</body>";
 			frameNumberSaved++;
 		} else {
-			frameWindow.document.body.innerHTML += html;
+			frameWindow.document.body.innerHTML += bodyHtml;
 			frameNumberSaved++;
 		}
 	}
@@ -176,8 +192,8 @@ frameByFrame = function() {
 	fbf.injectControls = function() {
 		var controls_html = "<i class=\"icon icon-to-start\"></i><i class=\"icon icon-to-end\"></i>";
 		control_bar = document.getElementsByClassName("ytp-chrome-controls")[0];
-		var fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
-		&nbsp;&nbsp;<b>Frameskip:&nbsp;" + frameskip + "</b>";
+		var fpsAndframeskip_html = "<strong>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</strong>\
+		&nbsp;&nbsp;<strong>Frameskip:&nbsp;" + frameskip + "</strong>";
 		var hotkeysButton_html = "<i class=\"icon icon-for-hotkeys-menu\"></i>";
 			
 		var newButtons = document.createElement('div');
@@ -202,8 +218,8 @@ frameByFrame = function() {
 		control_bar.insertBefore(fpsAndframeskip, child);
 		
 		fbf.updateFpsAndFS = function() {
-			fpsAndframeskip_html = "<b>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</b>\
-			&nbsp;&nbsp;<b>Frameskip:&nbsp;" + frameskip + "</b>";
+			fpsAndframeskip_html = "<strong>FPS:&nbsp;" + fbf.FRAMES_PER_SECOND + "</strong>\
+			&nbsp;&nbsp;<strong>Frameskip:&nbsp;" + frameskip + "</strong>";
 			fpsAndframeskip.innerHTML = fpsAndframeskip_html;
 		}
 		
