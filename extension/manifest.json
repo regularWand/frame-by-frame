@@ -11,11 +11,16 @@
     "author": "Calum J. Eadie, regularWand and Tom D. Chambers",
     "content_scripts": [
         {
-            "matches": ["http://www.youtube.com/watch*", "https://www.youtube.com/watch*"],
+            "matches": ["*://www.youtube.com/watch*"],
             "css": ["css/youtube-controls.css"],
             "js": ["content-script.js"]
         }
     ],
+
+	"permissions": [ 
+			"*://www.youtube.com/watch*"
+	],
+	
     "web_accessible_resources": [
         "frame-by-frame.js",
         "font/*"
