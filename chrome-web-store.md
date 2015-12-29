@@ -37,7 +37,6 @@ Use the buttons added to your video controls to navigate backwards and forwards 
   </tr>
 </table>
 
-
 Known issues:
 
 - Sometimes the buttons will not load straight away. Reload your page and they will appear.
