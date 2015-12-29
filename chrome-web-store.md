@@ -28,9 +28,9 @@ Shift + Mousewheel Up - Seeks by current frameskip when the cursor is in the lef
 
 *** Changes ***
 
-## [1.1.0] - 2015-12-29
+** [1.1.0] - 2015-12-29
 
-### Added
+* Added
 
 - A heap of new features from @regularWand!
     - Ability to adjust the number of frames skipped at a time using **<** and **>**.
@@ -39,27 +39,27 @@ Shift + Mousewheel Up - Seeks by current frameskip when the cursor is in the lef
     - Ability to toggle between frame-by-frame skipping for 30 and 25/24 fps video (default 25 fps) using **O**.
     - Ability to toggle visibility of youtube player controls using **\**.
 
-## [1.0.0] - 2015-11-12
+** [1.0.0] - 2015-11-12
 
-### Fixed
+* Fixed
 
 - Fixed visibility of forward / back buttons by updating to support latest YouTube interface.
 
-## [0.3.0] - 2015-03-09
+** [0.3.0] - 2015-03-09
 
-### Added
+* Added
 
 - Ability to move back and forward one frameskip using [ and ].
 
-## [0.2.0] - 2014-09-29
+** [0.2.0] - 2014-09-29
 
-### Added
+* Added
 
 - Unobtrusive UI, blending into the YouTube interface, and full screen support from @tomchambers2.
 
-## [0.1.0] - 2013-10-13
+** [0.1.0] - 2013-10-13
 
-### Added
+* Added
 
 - The very first version, hacked together in an afternoon.
 
