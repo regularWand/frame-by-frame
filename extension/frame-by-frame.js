@@ -97,6 +97,7 @@ frameByFrame = function() {
 		console.log("session links added");
 		var sessionlink = Array.from(document.getElementsByClassName("yt-uix-sessionlink"));
 			sessionlink.push(searchButton);
+			sessionlink.push(search);
 			for (var i = 0; i < sessionlink.length; i++) {
 				sessionlink[i].addEventListener("mouseup", function() {
 					fbf.controlsVisibility("visible");
@@ -347,6 +348,7 @@ var spfDataName = body.getAttribute("data-spf-name");
 if (spfDataName==="watch") {
 	frameByFrame();
 } else {
+	//https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 	var observer = new MutationObserver(
 		function() {
 			var spfDataName = body.getAttribute("data-spf-name");
@@ -359,4 +361,3 @@ if (spfDataName==="watch") {
 	var config = {attributes: true};
 	observer.observe(body, config);
 }
-
