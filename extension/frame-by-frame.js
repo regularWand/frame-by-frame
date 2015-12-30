@@ -339,5 +339,18 @@ frameByFrame = function() {
 	};
 }
 
-window.onload(frameByFrame());
+var spfDataName = document.getElementById("body").getAttribute("data-spf-name");
 
+if (spfDataName==="watch") {
+	frameByFrame();
+} else {
+	addSessionLinkListeners = function() {
+		var sessionlink = document.getElementsByClassName("yt-uix-sessionlink");
+			for (var i = 0; i < sessionlink.length; i++) {
+				sessionlink[i].addEventListener("mouseup", function() {
+				frameByFrame();
+				});
+			}
+		}
+	addSessionLinkListeners();
+}
