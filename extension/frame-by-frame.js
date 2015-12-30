@@ -91,19 +91,22 @@ frameByFrame = function() {
 	//Ensures player control elements are visible after
 	//navigating Youtube via session links. Anything else that needs to be
 	//reset when following session links could go here
+	var searchButton = document.getElementsByClassName("search-button")[0];
+	var search = document.getElementById("masthead-search-term");
 	fbf.addSessionLinkListeners = function() {
-		var sessionlink = document.getElementsByClassName("yt-uix-sessionlink");
+		console.log("session links added");
+		var sessionlink = Array.from(document.getElementsByClassName("yt-uix-sessionlink"));
+			sessionlink.push(searchButton);
 			for (var i = 0; i < sessionlink.length; i++) {
 				sessionlink[i].addEventListener("mouseup", function() {
 					fbf.controlsVisibility("visible");
 					controlsToggle = false;
 					sessionToggle = true;
-					
 					fbf.resetIntervals();
-					
 					var frameWindow;
 				});
 			}
+		
 	}
 	
 	var shadow = document.getElementsByClassName("ytp-gradient-bottom")[0];
@@ -321,7 +324,6 @@ frameByFrame = function() {
 
 		//The following two event listeners disable the hotkeys
 		//when input fields on a video page have focus
-		var search = document.getElementById("masthead-search-term");
 		search.addEventListener("focus", function(e) {
 			hotkeys = false;
 		});
@@ -339,18 +341,22 @@ frameByFrame = function() {
 	};
 }
 
-var spfDataName = document.getElementById("body").getAttribute("data-spf-name");
+var body = document.getElementById("body");
+var spfDataName = body.getAttribute("data-spf-name");
 
 if (spfDataName==="watch") {
 	frameByFrame();
 } else {
-	addSessionLinkListeners = function() {
-		var sessionlink = document.getElementsByClassName("yt-uix-sessionlink");
-			for (var i = 0; i < sessionlink.length; i++) {
-				sessionlink[i].addEventListener("mouseup", function() {
+	var observer = new MutationObserver(
+		function() {
+			var spfDataName = body.getAttribute("data-spf-name");
+			if (spfDataName==="watch") {
 				frameByFrame();
-				});
+				observer.disconnect();
 			}
 		}
-	addSessionLinkListeners();
+	);
+	var config = {attributes: true};
+	observer.observe(body, config);
 }
+
