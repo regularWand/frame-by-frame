@@ -7,6 +7,40 @@ chrome://extensions/
 Load unpacked extension.
 Select "extension" directory.
 
+## Test - Loading
+
+Open https://www.youtube.com/
+Open first video
+Expect: Frame by frame to have loaded
+
+Open https://www.youtube.com/
+Open first video in new tab
+Expect: Frame by frame to have loaded
+
+Open https://www.youtube.com/
+Search "Giant 6ft Water Balloon"
+Open first video
+Expect: Frame by frame to have loaded
+
+Open https://www.youtube.com/
+Search "Giant 6ft Water Balloon"
+Open first video in new tab
+Expect: Frame by frame to have loaded
+
+Open https://www.youtube.com/
+Search "Giant 6ft Water Balloon"
+Open first video
+Expect: Frame by frame to have loaded
+Open first video in results to the left
+Expect: Frame by frame to have loaded
+
+Open https://www.youtube.com/user/theslowmoguys
+Open first video on page
+Expect: Frame by frame to have loaded
+
+Open https://www.youtube.com/watch?v=j_OyHUqIIOU
+Expect: Frame by frame to have loaded
+
 ## Test - On Screen UX
 
 Open https://www.youtube.com/watch?v=j_OyHUqIIOU
