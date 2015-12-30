@@ -9,37 +9,49 @@ Select "extension" directory.
 
 ## Test - Loading
 
-- Open https://www.youtube.com/
-- Open first video
-- Expect: Frame by frame to have loaded
+### Home page
 
-- Open https://www.youtube.com/
-- Open first video in new tab
-- Expect: Frame by frame to have loaded
+Open https://www.youtube.com/
 
-- Open https://www.youtube.com/
-- Search "Giant 6ft Water Balloon"
-- Open first video
-- Expect: Frame by frame to have loaded
+Open first video
 
-- Open https://www.youtube.com/
-- Search "Giant 6ft Water Balloon"
-- Open first video in new tab
-- Expect: Frame by frame to have loaded
+Expect: Frame by frame to have loaded
 
-- Open https://www.youtube.com/
-- Search "Giant 6ft Water Balloon"
-- Open first video
-- Expect: Frame by frame to have loaded
-- Open first video in results to the left
-- Expect: Frame by frame to have loaded
+### Search
 
-- Open https://www.youtube.com/user/theslowmoguys
-- Open first video on page
-- Expect: Frame by frame to have loaded
+Open https://www.youtube.com/
 
-- Open https://www.youtube.com/watch?v=j_OyHUqIIOU
-- Expect: Frame by frame to have loaded
+Search "Giant 6ft Water Balloon"
+
+Open first video
+
+Expect: Frame by frame to have loaded
+
+### Side bar
+
+Open https://www.youtube.com/
+
+Search "Giant 6ft Water Balloon"
+
+Open first video
+
+Open first video in results to the left
+
+Expect: Frame by frame to have loaded
+
+### Channel
+
+Open https://www.youtube.com/user/theslowmoguys
+
+Open first video on page
+
+Expect: Frame by frame to have loaded
+
+### Direct
+
+Open https://www.youtube.com/watch?v=j_OyHUqIIOU
+
+Expect: Frame by frame to have loaded
 
 ## Test - On Screen UX
 
