@@ -1,22 +1,25 @@
 frameByFrame = function() {
 	var fbf = {};
-		fbf.FPS = 25,
-		fbf.LEFT_SQUARE_BRACKET = 219,
-		fbf.RIGHT_SQUARE_BRACKET = 221,
-		fbf.COMMA = 188,
-		fbf.PERIOD = 190,
-		fbf.P_KEY = 80,
-		fbf.O_KEY = 79,
-		fbf.BACKSLASH = 220,
-		fbf.APOSTROPHE = 222;
+		fbf.FPS = 25;
+
+	var hotkeys = {};	
+		hotkeys.LEFT_SQUARE_BRACKET = 219,
+		hotkeys.RIGHT_SQUARE_BRACKET = 221,
+		hotkeys.COMMA = 188,
+		hotkeys.PERIOD = 190,
+		hotkeys.P_KEY = 80,
+		hotkeys.O_KEY = 79,
+		hotkeys.BACKSLASH = 220,
+		hotkeys.APOSTROPHE = 222;
 	
 	var frameskip = 1,
 		imageURLCounter = 0,
 		frameNumberSaved = 0,
 		seekTime = (frameskip/fbf.FPS),
-		hotkeys = true,
+		hotkeysEnabled = true,
 		sessionToggle = true,
 		captureToggle = true,
+		seekToggle = true,
 		fbfPlayback = true,
 		controlsToggle = false,
 		continueCapture = false,
@@ -30,6 +33,10 @@ frameByFrame = function() {
 		frameWindow,
 		player = document.getElementById("movie_player"),
 		header = document.getElementById("watch-header");
+	
+	fbf.enableSeek = function() {
+		seekToggle = true;
+	}
 	
 	fbf.prevFrame = function() {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
@@ -73,6 +80,7 @@ frameByFrame = function() {
 	}
 	
 	fbf.getVideoTime = function(video) {
+		//https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#file_and_directory_names
 		var currentTimeString = document.getElementsByClassName("ytp-time-current")[0].innerHTML;
 		var safeCTS = currentTimeString.replace(/:/g, "꞉");
 		var durationString = document.getElementsByClassName("ytp-time-duration")[0].innerHTML;
@@ -84,9 +92,9 @@ frameByFrame = function() {
 		var frameTotal = Math.floor(duration*fbf.FPS);
 		
 		var videoTime = currentTimeString + "/" + durationString + "\
-		(" + frameNumber + "/" + frameTotal + "  Frames)";
+		(" + frameNumber + "/" + frameTotal + "  frames)";
 		var safeVideoTime = safeCTS + "∕" + safeDS + "_"
-		safeVideoTime += "(" + frameNumber + "∕" + frameTotal + "  Frames)";
+		safeVideoTime += "(" + frameNumber + "∕" + frameTotal + "  frames)";
 		fractionalFrames = (currentTime%fbf.FPS);
 		
 		return [videoTime, safeVideoTime];
@@ -204,14 +212,15 @@ frameByFrame = function() {
 			</figcaption><strong><img src=\"" + imageURL[frameNumberSaved] + "\"></div>";
 		if (!frameWindow || frameWindow.closed) {
 			player.pauseVideo();
-			frameWindow = window.open("", "Frame Captured");
-			var headHtml = "<head><style>.frame-div { font-family: \"Trebuchet MS\", Arial,\
+			frameWindow = window.open("", "Frame Capturer", "height=\
+			" + window.height + ", width=" + window.width + "\"");
+			var headHtml = "<title>Frame Capturer</title><style>.frame-div { font-family: \"Trebuchet MS\", Arial,\
 			Helvetica, sans-serif; background-color: rgb(179,0,0); padding: 5px;\
 			border-style: solid; border-width: 2px; width: -webkit-fit-content} .fig-caption\
 			{color: rgb(240,240,240);} ::-webkit-scrollbar {width: 6px;height: 6px;}\
 			::-webkit-scrollbar-button {width: 0px;height: 0px;}::-webkit-scrollbar-thumb\
 			{background: #e1e1e1;border: 0px none #ffffff;border-radius: 50px;}\
-			::-webkit-scrollbar-corner {background: transparent;}<head><style>";
+			::-webkit-scrollbar-corner {background: transparent;}<style>";
 			frameWindow.document.head.innerHTML = headHtml;
 			frameWindow.document.body.outerHTML = "<body style=\"margin: 0px;\">" + bodyHtml + "</body>";
 			frameNumberSaved+=2;
@@ -343,42 +352,50 @@ frameByFrame = function() {
 		
 	//Add hotkey event listeners	
 	document.addEventListener("keydown", function(e) {
-		if (hotkeys) {
+		if (hotkeysEnabled) {
 			switch(e.which) {
-				case !e.altKey && !e.shiftKey && fbf.LEFT_SQUARE_BRACKET:
-					fbf.prevFrame();
+				case !e.altKey && !e.shiftKey && hotkeys.LEFT_SQUARE_BRACKET:
+					if (seekToggle) {
+						seekToggle = false;
+						setTimeout(fbf.enableSeek, 200);
+						fbf.prevFrame();
+					}
 					break;
-				case !e.altKey && !e.shiftKey && fbf.RIGHT_SQUARE_BRACKET:
-					fbf.nextFrame();
+				case !e.altKey && !e.shiftKey && hotkeys.RIGHT_SQUARE_BRACKET:
+					if (seekToggle) {
+						seekToggle = false;
+						setTimeout(fbf.enableSeek, 200);
+						fbf.nextFrame();
+					}
 					break;
-				case e.altKey && !e.shiftKey && fbf.LEFT_SQUARE_BRACKET:
+				case e.altKey && !e.shiftKey && hotkeys.LEFT_SQUARE_BRACKET:
 					fbf.fbfInterval("reverse", "captureDisabled");
 					break;
-				case e.altKey && !e.shiftKey && fbf.RIGHT_SQUARE_BRACKET:
+				case e.altKey && !e.shiftKey && hotkeys.RIGHT_SQUARE_BRACKET:
 					fbf.fbfInterval("forward", "captureDisabled");
 					break;
-				/*case e.altKey && e.shiftKey && fbf.LEFT_SQUARE_BRACKET:
+				/*case e.altKey && e.shiftKey && hotkeys.LEFT_SQUARE_BRACKET:
 					fbf.fbfInterval("reverse", "captureEnabled");
 					break;
-				case e.altKey && e.shiftKey && fbf.RIGHT_SQUARE_BRACKET:
+				case e.altKey && e.shiftKey && hotkeys.RIGHT_SQUARE_BRACKET:
 					fbf.fbfInterval("forward", "captureEnabled");
 					break;*/
-				case fbf.COMMA:
+				case hotkeys.COMMA:
 					fbf.multiplyFS("decrease");
 					break;
-				case fbf.PERIOD:
+				case hotkeys.PERIOD:
 					fbf.multiplyFS("increase");
 					break;
-				case fbf.P_KEY:
+				case hotkeys.P_KEY:
 					fbf.togglePlaybackRate();
 					break;
-				case fbf.O_KEY:
+				case hotkeys.O_KEY:
 					fbf.setFrameRate();
 					break;
-				case fbf.BACKSLASH:
+				case hotkeys.BACKSLASH:
 					fbf.toggleControls();
 					break;
-				case !e.altKey && fbf.APOSTROPHE:
+				case !e.altKey && hotkeys.APOSTROPHE:
 					//https://remysharp.com/2010/07/21/throttling-function-calls
 					if (captureToggle) {
 						captureToggle = false;
@@ -386,7 +403,7 @@ frameByFrame = function() {
 						fbf.captureFrame();
 					}
 					break;
-				case e.altKey && fbf.APOSTROPHE:
+				case e.altKey && hotkeys.APOSTROPHE:
 					fbf.saveFrame(imageURL);
 					break;
 			}
@@ -414,18 +431,18 @@ frameByFrame = function() {
 	//The following two event listeners disable the hotkeys
 	//when input fields on a video page have focus
 	search.addEventListener("focus", function(e) {
-		hotkeys = false;
+		hotkeysEnabled = false;
 	});
 	search.addEventListener("blur", function(e) {
-		hotkeys = true;
+		hotkeysEnabled = true;
 	});
 
 	var comment = document.getElementById("watch-discussion");
 	comment.addEventListener("focus", function(e) {
-		hotkeys = false;
+		hotkeysEnabled = false;
 	}, true);
 	comment.addEventListener("blur", function(e) {
-		hotkeys = true;
+		hotkeysEnabled = true;
 	}, true);
 }
 
