@@ -52,7 +52,7 @@ How it works
 ------------
 
 `frame by frame` uses Google Chrome's content scripts feature to add additional
-behavour to the YouTube player.
+behaviour to the YouTube player.
 
 License
 -------
