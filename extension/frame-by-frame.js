@@ -1,3 +1,5 @@
+//Bug when following session link automatically when idle on invalid video (blocked etc)
+//the span innerhtml of the current time doesnt update when hidden
 frameByFrame = function() {
 	var fbf = {};
 		fbf.FPS = 25;
@@ -16,6 +18,7 @@ frameByFrame = function() {
 		imageURLCounter = 0,
 		frameNumberSaved = 0,
 		seekTime = (frameskip/fbf.FPS),
+		seekInterval = seekTime*1000,
 		hotkeysEnabled = true,
 		sessionToggle = true,
 		captureToggle = true,
@@ -47,24 +50,38 @@ frameByFrame = function() {
 	fbf.nextFrame = function() {
 		// Based on YouTube enhancer userscript, http://userscripts.org/scripts/show/33042.
 		player.pauseVideo();
-		player.seekBy(seekTime);
+		console.log(player.getCurrentTime());
+		console.log(seekInterval);
+		player.playVideo();
+		setTimeout(player.pauseVideo, seekInterval);
+		//player.seekBy(seekTime);
 	}
 
 	fbf.togglePlaybackRate = function() {
 		if (player.getPlaybackRate()===0.25) {
 			player.setPlaybackRate(1);
+			seekInterval = seekTime*1000;	
 		}
 		else {
 			player.setPlaybackRate(0.25);
+			seekInterval = seekTime*4000;
 		}
 	}
 
 	fbf.setFrameRate = function() {
-		if (fbf.FPS===25) {
-			fbf.FPS = 30;
-		}
-		else {
-			fbf.FPS = 25;
+		switch(fbf.FPS) {
+			case 25:
+				fbf.FPS = 30;
+				break;
+			case 30:
+				fbf.FPS = 60;
+				break;
+			case 60:
+				fbf.FPS = 24;
+				break;
+			case 24:
+			fbf.FPS = 25
+				break;
 		}
 		fbf.updateFpsAndFS();
 	}
@@ -125,7 +142,9 @@ frameByFrame = function() {
 		var sessionlink = Array.from(document.getElementsByClassName("yt-uix-sessionlink"));
 			sessionlink.push(searchButton);
 			sessionlink.push(search);
-			sessionlink.push(showMore);
+			if (showMore) {
+				sessionlink.push(showMore);
+			}
 			//https://jsperf.com/for-vs-foreach/66
 			for (var i = 0, len = sessionlink.length; i < len; ++i) {
 				sessionlink[i].addEventListener("mouseup", function() {
@@ -323,6 +342,11 @@ frameByFrame = function() {
 		
 		fbf.updateFpsAndFS = function() {
 			seekTime = (frameskip/fbf.FPS);
+			if (player.getPlaybackRate()===0.25) {
+				seekInterval = seekTime*4000;	
+			} else {
+				seekInterval = seekTime*1000;
+			}
 			fpsAndframeskip_html = "<strong>FPS:&nbsp;" + fbf.FPS + "</strong>\
 			&nbsp;&nbsp;<strong>Frameskip:&nbsp;" + frameskip + "</strong>";
 			fpsAndframeskip.innerHTML = fpsAndframeskip_html;
